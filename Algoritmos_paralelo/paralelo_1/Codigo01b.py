@@ -1,4 +1,8 @@
-﻿
+﻿import multiprocessing
+import time
+import queue
+import os
+import random
 
 def estudiante_process(id_estudiante, result_queue):
     """
@@ -36,12 +40,7 @@ def profesor_monitor_process(result_queue, total_estudiantes, processes):
     
     while resultados_recibidos < total_estudiantes:
         # Intentar obtener resultado sin bloquear
-        try:
-            resultado = result_queue.get(timeout=0.1)
-            resultados_recibidos += 1
-        except:
-            # No hay resultados disponibles aún
-            pass
+        resultados_recibidos = result_queue.qsize()
         
         # Mostrar progreso si cambió
         if resultados_recibidos != progreso_anterior:
@@ -58,7 +57,7 @@ def main_multiprocessing():
     print("🎯 Usando procesos separados (real paralelismo)")
     print("=" * 60)
     
-    num_estudiantes = 12
+    num_estudiantes = 40
     resultados = []
     
     # Cola para comunicación entre procesos

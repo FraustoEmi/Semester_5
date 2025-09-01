@@ -51,7 +51,7 @@ def main_concurrent_futures():
     print("🎯 Usando ThreadPoolExecutor para paralelismo")
     print("=" * 60)
     
-    num_estudiantes = 12
+    num_estudiantes = 40
     resultados = []
     
     print(f"\n🎯 Creando {num_estudiantes} tareas de estudiantes...")

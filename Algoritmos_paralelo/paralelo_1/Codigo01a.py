@@ -28,7 +28,7 @@ def main_threading():
     """Implementación original modificada para retornar resultados"""
     lock = threading.Lock()
     resultados = {}
-    num_estudiantes = 8
+    num_estudiantes = 40
     
     # Crear hilos
     threads = []
