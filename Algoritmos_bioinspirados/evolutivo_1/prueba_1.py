@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 def f(x):
     return -(0.1+((1-x)**2)-0.1*np.cos(6*np.pi*(1-x))) + 2
 
+def f2(x):
+    return abs((x-5)/(2+np.sin(x)))
+
 #Creacion de individuos o poblacion
 def poblar(n,long): 
     '''n =      numero de individuos o tamaño de la poblacion''' 
