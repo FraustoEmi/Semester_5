@@ -10,10 +10,9 @@ def poblar(n,long):
 
 
 
-def ayudantes(id_ayudante,reporte,lock,poblacion,inrange,endrange,n,pc):
+def ayudantes(id_ayudante,reporte,lock,poblacion,inrange,endrange,n,pc,pm):
     r,c = poblacion.shape
-    with lock:
-        print(f'{id_ayudante} comenzo su tarea y si mitad de [{inrange},{endrange}]')
+    print(f'{id_ayudante} comenzo su tarea y si mitad de [{inrange},{endrange}]')
     M = np.zeros((int(n/2),c)) #Matriz de 50 pares por cada ayudante
     for par in range(int(pc/2)):
         r1 = np.random.randint(inrange,endrange,size=(1,2)) #par de padres en esa mitad
@@ -26,28 +25,40 @@ def ayudantes(id_ayudante,reporte,lock,poblacion,inrange,endrange,n,pc):
         #Crear descendientes 
         hijo_1 = np.concatenate((Padre_1[0:r2],Padre_2[r2:]))
         hijo_2 = np.concatenate((Padre_2[0:r2],Padre_1[r2:]))
+            
                 
         #Se almacenan los decendientes en la matriz auxiliar M
         M[2*par,:] = hijo_1
         M[2*par+1,:] = hijo_2
         
+    #***********************MUTAR*************************
+    print(f'El ayudante {id_ayudante} acabo de cruzar su mitad {M.shape}')
+    print(f'El ayudante {id_ayudante} empezara a mutar su mitad')
+    r , c = M.shape
+    n = int(pm*c)
+    for i in range(n):
+        r1 = np.random.randint(0,r) #numero aleatorio para seleccionar al individuo
+        r2 = np.random.randint(0,c) #numero aleatorio para seleccionar el gen a mutar
+        if (M[r1,r2] == 0):
+            M[r1,r2] = 1
+        else:
+            M[r1,r2] = 0
+            
         
     
     with lock:
-        print(f'El ayudante {id_ayudante} acabo de cruzar su mitad')
+        print(f'El ayudante {id_ayudante} acabo sus tareas de cruza y mutacion')
         reporte[id_ayudante] = M
-        print(M.shape)
     
             
     
     
     
 
-def god(reporte,lock,total_ayudantes):
+def god(reporte,lock,total_ayudantes,progreso_anterior):
     '''
     god es el hilo principal que estara suervisando el progreso de los hilos
     '''
-    progreso_anterior = -1
     while True:
         with lock:
             progreso_actual = len(reporte)
@@ -62,29 +73,29 @@ def god(reporte,lock,total_ayudantes):
             break
         
         time.sleep(0.3)
-                
-def añadir(id_ayudante,reporte,sig_gen):
-    for i in nombres:
-        sig_gen += reporte[i]
 
+    
 #*****************************************************************
 #hiperparametros
 n=100
 l=8
 pc = n/2
+pm = 0.025
 total_ayudantes = 2
 inrange = [0,(n/2)+1]
 endrange = [n/2 , n]
+
 
 #variables necesarias
 mejor_decimal_per_gen = []
 lock = threading.Lock()
 reporte={}
+progreso_anterior = -1
 
 
 hilo_creador = threading.Thread(
     target=god,
-    args=(reporte,lock,total_ayudantes),
+    args=(reporte,lock,total_ayudantes,progreso_anterior),
     name='Dios'
 )
 
@@ -107,7 +118,7 @@ hilo_ayudantes = []
 for i in range(total_ayudantes):
     hilo = threading.Thread(
         target=ayudantes,
-        args=(nombres[i],reporte,lock,p,inrange[i],endrange[i],n,pc),
+        args=(nombres[i],reporte,lock,p,inrange[i],endrange[i],n,pc,pm),
         name=f'Ayudante - {nombres[i]}'
     )
     hilo_ayudantes.append(hilo)
@@ -118,20 +129,15 @@ hilo_creador.start()
 
 for i, hilo in enumerate(hilo_ayudantes):
     hilo.start()
-    
-print('\nEsperando...')
 
 for hilo in hilo_ayudantes:
     hilo.join()
     
-p_cruzada = np.zeros(p.shape)
-p_cruzada = añadir(nombres,reporte,p_cruzada)    
+next_gen = np.vstack((reporte['Adan'],reporte['Eva']))  
 
 hilo_creador.join()
 
-print((reporte['Adan']).shape)
-print(p_cruzada.shape)
-
+print(next_gen.shape)
 
 
 
