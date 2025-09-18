@@ -144,64 +144,6 @@ class TSPGeneticAlgorithm:
         print(f"Mejor solución encontrada: Distancia = {self.best_distance:.2f}")
         return self.best_solution, self.best_distance, self.fitness_history
     
-class administrador: 
-    '''ESTE HILO SERA ADMINISTRADOR, QUE VA A ESTAR VERIFICANDO CADA GENERACION Y VA A INICIALIZAR LA PRIMERA GENERACION'''
-    def __init__(self, distance_matrix, population_size=100, mutation_rate=0.01, 
-                 elite_size=20, generations=500, tournament_size=5):
-        self.distance_matrix = np.array(distance_matrix)
-        self.num_cities = len(distance_matrix)
-        self.population_size = population_size
-        self.mutation_rate = mutation_rate
-        self.elite_size = elite_size
-        self.generations = generations
-        self.tournament_size = tournament_size
-        self.best_solution = None
-        self.best_distance = float('inf')
-        self.fitness_history = []
-    
-    def run():
-        print()
-
-class calculador_distancia:
-    '''ESTE HILO SERA EL QUE CALCULE LA DISTANCIA CUANDO YA HAYA UN INDIVIDUO NUEVO'''
-    def __init__(self,distance_matrix,evento):
-        self.distance_matrix = np.array(distance_matrix)
-        self.evento = evento
-
-class calculador_fit:
-    '''ESTE HILO SERA EL QUE CALCULE EL FITNESS DE CADA DISTANCIA NUEVA QUE SALGA'''
-    def __init__(self,distancia,evento):
-        self.distance = distancia
-        self.evento = evento
-        
-class rankeador:
-    '''ESTE HILO RANKEARA LA POBLACION ACTUAL, ACTUARA CADA QUE APAREZCA EL FITNESS DE UN NUEVO INDIVIDUO Y LOS IRA ORDENANDO'''
-    def __init__(self,poblacion,elite_size,poblacion_rankeada,evento):
-        self.poblacion = poblacion
-        self.elite_size = elite_size
-        self.poblacion_rankeada = poblacion_rankeada
-        self.evento = evento
-
-class seleccionador:
-    '''ESTE HILO SELECCIONARA LA NUEVA POBLACION CUANDO TENGA UNA POBLACION RANKEADA'''
-    def __init__(self,old_gen,size_pob,new_gen):
-        self.old_gen = old_gen
-        self.size_pob = size_pob
-        self.new_gen = new_gen
-
-class cruzador:
-    '''ESTE HILO CRUZARA A DOS INDIVIDUOS CADA VEZ QUE SE GENEREN'''
-    def __init__(self,p_cruza,padres,hijos):
-        self.p_cruza = p_cruza
-        self.padres = padres
-        self.hijos = hijos
-
-class mutador:
-    '''ESTE HILO VA A MUTAR A UN INDIVIDUO CADA VEZ QUE APAREZCA'''
-    def __init__(self,p_muta,individuo,mutado):
-        self.p_muta = p_muta
-        self.individuo = individuo
-        self.mutado = mutado
 
 def load_tsp_data(file_path):
     """Cargar datos del archivo TSP"""
